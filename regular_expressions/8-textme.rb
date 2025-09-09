@@ -1,13 +1,18 @@
 #!/usr/bin/env ruby
 
-# Regex pattern to match the "from", "to", and "flags" fields in the log
-pattern = /\[from:(\+?\d+)\]\s*\[to:(\+?\d+)\]\s*\[flags:([-\d:]+)\]/
+# This regex captures:
+# 1. sender: [from:...] 
+# 2. receiver: [to:...]
+# 3. flags: [flags:...]
+pattern = /\[from:([+\d]+)\].*?\[to:([+\d]+)\].*?\[flags:([-\d:]+)\]/ 
 
 ARGF.each_line do |line|
-  # Try to match the pattern
-  if match = line.match(pattern)
+  # Remove HTML entities like &nbsp; that may appear in logs
+  clean_line = line.gsub('&nbsp;', ' ')
+
+  if match = clean_line.match(pattern)
     sender, receiver, flags = match.captures
-    # Print in the requested format
+    # Print exactly in requested format: [SENDER],[RECEIVER],[FLAGS]
     puts "#{sender},#{receiver},#{flags}"
   end
 end
