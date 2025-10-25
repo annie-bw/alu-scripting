@@ -33,8 +33,8 @@ def top_ten(subreddit):
             print(post.get("data", {}).get("title"))
     except Exception:
         pass
-    finally:
-        print("OK")
+
+    print("OK")
 
 
 if __name__ == "__main__":
