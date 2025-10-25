@@ -8,8 +8,15 @@ import sys
 
 
 def top_ten(subreddit):
+    """
+    Queries the Reddit API and prints the titles of the first
+    10 hot posts for a given subreddit. Prints 'OK' at the end.
+    """
     url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
-    headers = {"User-Agent": "Python:topten:v1.0 (by /u/yourusername)"}
+    headers = {
+        "User-Agent": "Python:topten:v1.0 "
+                      "(by /u/yourusername)"
+    }
 
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
@@ -25,7 +32,9 @@ def top_ten(subreddit):
             if title:
                 output += "{}\n".format(title)
 
-        sys.stdout.write(output + "OK")  # all titles + OK with no extra newline
+        # Remove trailing newline so OK is exactly last 2 chars
+        output = output.rstrip("\n")
+        sys.stdout.write(output + "OK")
 
     except Exception:
         sys.stdout.write("OK")
