@@ -1,33 +1,44 @@
 #!/usr/bin/python3
 """
-This module queries the Reddit API and retrieves the number
-of subscribers for a given subreddit. If the subreddit is
-invalid or does not exist, it returns 0.
+This script queries the Reddit API and prints the titles of
+the first 10 hot posts of a given subreddit. At the end,
+prints 'OK'. If the subreddit is invalid, only prints 'OK'.
 """
 
 import requests
+import sys
 
 
-def number_of_subscribers(subreddit):
+def top_ten(subreddit):
     """
-    Queries the Reddit API and returns the number of subscribers
-    for a given subreddit.
+    Queries the Reddit API and prints the titles of the first
+    10 hot posts for a given subreddit.
+    Prints 'OK' at the end.
 
     Args:
         subreddit (str): Name of the subreddit
-
-    Returns:
-        int: Number of subscribers, or 0 if invalid subreddit
     """
-    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-    headers = {"User-Agent": "Python:subscribers:v1.0 (by /u/yourusername)"}
+    url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
+    headers = {"User-Agent": "Python:topten:v1.0 (by /u/yourusername)"}
 
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         if response.status_code != 200:
-            return 0
+            print("OK")
+            return
 
         data = response.json()
-        return data.get("data", {}).get("subscribers", 0)
+        posts = data.get("data", {}).get("children", [])
+        for post in posts:
+            print(post.get("data", {}).get("title"))
     except Exception:
-        return 0
+        pass
+    finally:
+        print("OK")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        top_ten(sys.argv[1])
+    else:
+        print("Usage: {} <subreddit>".format(sys.argv[0]))
