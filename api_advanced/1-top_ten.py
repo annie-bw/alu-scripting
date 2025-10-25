@@ -34,7 +34,7 @@ def top_ten(subreddit):
     except Exception:
         pass
 
-    print("OK")
+    print("OK",end="")
 
 
 if __name__ == "__main__":
