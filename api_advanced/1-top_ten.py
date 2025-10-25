@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 """
-This script queries the Reddit API and prints the titles of
-the first 10 hot posts of a given subreddit. At the end,
-prints 'OK'. If the subreddit is invalid, only prints 'OK'.
+Script to get top 10 hot posts for a subreddit and print OK.
 """
 
 import requests
@@ -10,14 +8,6 @@ import sys
 
 
 def top_ten(subreddit):
-    """
-    Queries the Reddit API and prints the titles of the first
-    10 hot posts for a given subreddit.
-    Prints 'OK' at the end.
-
-    Args:
-        subreddit (str): Name of the subreddit
-    """
     url = "https://www.reddit.com/r/{}/hot.json?limit=10".format(subreddit)
     headers = {"User-Agent": "Python:topten:v1.0 (by /u/yourusername)"}
 
@@ -29,15 +19,16 @@ def top_ten(subreddit):
 
         data = response.json()
         posts = data.get("data", {}).get("children", [])
+        output = ""
         for post in posts:
-            print(post.get("data", {}).get("title"))
+            title = post.get("data", {}).get("title")
+            if title:
+                output += "{}\n".format(title)
+
+        sys.stdout.write(output + "OK")  # all titles + OK with no extra newline
 
     except Exception:
-        # ignore exceptions
-        pass
-
-    # Print exactly once, no newline after
-    sys.stdout.write("OK")
+        sys.stdout.write("OK")
 
 
 if __name__ == "__main__":
