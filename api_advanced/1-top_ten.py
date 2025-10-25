@@ -24,17 +24,19 @@ def top_ten(subreddit):
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
         if response.status_code != 200:
-            print("OK")
+            print("OK", end="")
             return
 
         data = response.json()
         posts = data.get("data", {}).get("children", [])
         for post in posts:
             print(post.get("data", {}).get("title"))
+
     except Exception:
         pass
 
-    print("OK",end="")
+    # Print exactly once, no newline after
+    print("OK", end="")
 
 
 if __name__ == "__main__":
