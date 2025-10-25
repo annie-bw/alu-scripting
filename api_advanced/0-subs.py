@@ -2,9 +2,8 @@
 """
 This module queries the Reddit API and retrieves the number
 of subscribers for a given subreddit. If the subreddit is
-invalid, it returns 0.
+invalid or does not exist, it returns 0.
 """
-
 
 import requests
 
@@ -20,7 +19,7 @@ def number_of_subscribers(subreddit):
     Returns:
         int: Number of subscribers, or 0 if invalid subreddit
     """
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
     headers = {"User-Agent": "Python:subscribers:v1.0 (by /u/yourusername)"}
 
     try:
